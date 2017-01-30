@@ -7,19 +7,34 @@
 //
 
 import UIKit
+import RealmSwift
 
 class ViewController: UIViewController {
-
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    // Do any additional setup after loading the view, typically from a nib.
+  
+  @IBAction func addObject() {
+    do {
+      let realm = try Realm()
+      try? realm.write {
+        realm.add(Show())
+      }
+      print("Added show")
+    } catch {
+      print("Could not create realm. \(error)")
+    }
   }
-
-  override func didReceiveMemoryWarning() {
-    super.didReceiveMemoryWarning()
-    // Dispose of any resources that can be recreated.
+  
+  @IBAction func crash() {
+    do {
+      let realm = try Realm()
+      let shows = realm.objects(Show.self)
+      print("Access realm property on (\(shows.count) shows)")
+      for show in shows {
+        _ = show.id
+      }
+    } catch {
+      print("Could not create realm. \(error)")
+    }
   }
-
-
+  
 }
 
